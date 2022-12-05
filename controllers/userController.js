@@ -15,8 +15,11 @@ exports.userRegister = async (req, res) => {
 
 exports.userLogin = async (req, res) => {
   try {
-    c
+    const loginData = req.body;
+    const userServiceInstance = new UserService();
+    await userServiceInstance.login(loginData);
+    res.send("login");
   } catch (error) {
-    res.send(400).send({ error: error.message });
+    res.status(400).send({ error: error.message });
   }
 };
