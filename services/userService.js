@@ -1,17 +1,24 @@
 /** @format */
-
-const userValidateSchema = require("../shared/schemas/joiSchema/user");
-
-const User = require("../shared/schemas/mongoSchema/user");
+const UserModel = require("../models/UserModel");
+const { registerValidateSchema, loginValidationSchema } = require("../shared/schemas/joiSchema/user");
 class UserService {
   constructor() {}
-  async register(userData) {
-    //validate user
-    userValidateSchema.validate(userData);
+  async register(registerData) {
+    //validate register
+    await registerValidateSchema.validateAsync(registerData);
     //create user mongodb
-    const user = new User(userData);
-    await user.save();
-    return user;
+    const userModel = new UserModel();
+    //check password confirmation
+    const newUser = await userModel.createUser(registerData);
+    return newUser;
+  }
+  async login(loginData) {
+    //validate login
+    loginValidationSchema.validate(loginData);
+    //get user data
+    const userModel = new UserModel(loginData);
+    const { username, password } = loginData;
+    const user = await userModel.getUserByUsername(username);
   }
 }
 
