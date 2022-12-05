@@ -2,7 +2,7 @@
 
 const express = require("express");
 const router = express.Router();
-const { userRegister } = require("../controllers/user");
+const { userRegister } = require("../controllers/userController");
 
 //users
 router.get("/users/register", userRegister);
